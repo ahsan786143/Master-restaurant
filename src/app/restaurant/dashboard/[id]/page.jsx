@@ -1,53 +1,60 @@
 "use client";
-import React, { useState } from "react";
-import { motion } from "framer-motion"; // done all
+import React, { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { motion } from "framer-motion";
 import { Utensils, DollarSign, FileText, ImageIcon } from "lucide-react";
 
-const AddFoodItems = () => {
+const EditFoodItems = () => {
+  const router = useRouter();
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    if (id) handleLoadFoodItems();
+  }, [id]);
+
+  const handleLoadFoodItems = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/restaurant/foods/edit/${id}`);
+      const data = await res.json();
+
+      if (data.success) {
+        const food = data.data;
+        setName(food.name);
+        setPrice(food.price);
+        setDescription(food.description);
+        setImage(food.img_URL);
+      } else {
+        console.error("Failed to load food item:", data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching food:", err);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!name || !price || !description || !image) {
       setError(true);
       return;
     }
 
-    const restaurantData = JSON.parse(localStorage.getItem("user"));
-    const resto_id = restaurantData?._id;
+    const res = await fetch(`http://localhost:3000/api/restaurant/foods/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, price, description, img_URL: image }),
+    });
 
-    try {
-      const response = await fetch("http://localhost:3000/api/restaurant/foods", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          price,
-          description,
-          img_URL: image,
-          resto_id,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        alert("Food added successfully!");
-        setName("");
-        setPrice("");
-        setDescription("");
-        setImage("");
-        window.location.href = "/restaurant/dashboard";
-      } else {
-        alert("Error: " + data.error);
-      }
-    } catch (err) {
-      console.error("Submit error:", err);
+    const data = await res.json();
+    if (data.success) {
+      alert("Food updated successfully!");
+      router.push("/restaurant/dashboard");
+    } else {
+      alert("Failed to update food");
     }
   };
 
@@ -57,10 +64,10 @@ const AddFoodItems = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md"
+        className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md mt-5"
       >
         <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-          Add Food Item
+          Edit Food Item
         </h1>
 
         <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
@@ -104,9 +111,7 @@ const AddFoodItems = () => {
               className="pl-10 pr-3 py-2 w-full border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-24"
             />
             {error && !description && (
-              <p className="text-red-500 text-sm mt-1">
-                Please enter description
-              </p>
+              <p className="text-red-500 text-sm mt-1">Please enter description</p>
             )}
           </div>
 
@@ -121,9 +126,7 @@ const AddFoodItems = () => {
               className="pl-10 pr-3 py-2 w-full border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {error && !image && (
-              <p className="text-red-500 text-sm mt-1">
-                Please enter image URL
-              </p>
+              <p className="text-red-500 text-sm mt-1">Please enter image URL</p>
             )}
           </div>
 
@@ -149,7 +152,18 @@ const AddFoodItems = () => {
             type="submit"
             className="mt-6 bg-blue-600 text-white py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-blue-700 transition"
           >
-            Add Food
+            Update Food
+          </motion.button>
+
+          {/* Back Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="button"
+            onClick={() => router.push("/restaurant/dashboard")}
+            className="mt-3 bg-gray-500 text-white py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-600 transition"
+          >
+            Back to Dashboard
           </motion.button>
         </form>
       </motion.div>
@@ -157,4 +171,4 @@ const AddFoodItems = () => {
   );
 };
 
-export default AddFoodItems;
+export default EditFoodItems;

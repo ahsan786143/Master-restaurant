@@ -19,7 +19,7 @@ const UserAuth = () => {
         <div className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-br from-blue-600 via-sky-500 to-teal-400 text-white p-10">
           <div className="max-w-md text-center space-y-6">
             <h2 className="text-4xl font-extrabold drop-shadow-md">
-               Welcome to <span className="text-yellow-300">DFC</span>
+               Welcome to <span className="text-yellow-300">Master Restaurant</span>
             </h2>
             <p className="text-lg leading-relaxed text-white/90 font-medium">
               Order your favorite meals with just a few clicks. Fresh food,

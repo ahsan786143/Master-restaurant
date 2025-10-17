@@ -1,39 +1,59 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin } from "lucide-react";
 import CustomerHeader from "./_components/CustomerHeader";
 import Footer from "./_components/Footer";
+import BannerPage from "./_components/Banner";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [showBanner, setShowBanner] = useState(true);
   const [locations, setLocations] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [restaurants, setRestaurants] = useState([]);
   const router = useRouter();
 
-  // ✅ Fetch list of locations
+  //  Watch for login/logout changes dynamically
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const res = await fetch("/api/customer/locations");
-        const data = await res.json();
-        if (data.success) setLocations(data.result);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
+    const checkLoginStatus = () => {
+      const user = localStorage.getItem("user");
+      const restaurantUser = localStorage.getItem("restaurantUser");
+      setShowBanner(!(user || restaurantUser));
     };
-    fetchLocations();
-    handleSearch();
+
+    checkLoginStatus(); // initial check
+    window.addEventListener("storage", checkLoginStatus); // react to login/logout in other tabs
+
+    // Custom event for logout or login within same tab
+    window.addEventListener("authChange", checkLoginStatus);
+
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+      window.removeEventListener("authChange", checkLoginStatus);
+    };
   }, []);
 
+  //  Fetch locations & restaurants when banner hides
   useEffect(() => {
-    if (selectedPlace || searchTerm) handleSearch();
-  }, [selectedPlace, searchTerm]);
+    if (!showBanner) {
+      const fetchLocations = async () => {
+        try {
+          const res = await fetch("/api/customer/locations");
+          const data = await res.json();
+          if (data.success) setLocations(data.result);
+        } catch (error) {
+          console.error("Error fetching locations:", error);
+        }
+      };
+      fetchLocations();
+      handleSearch();
+    }
+  }, [showBanner]);
 
-  // ✅ Handle search query
+  //  Search handler
   const handleSearch = async () => {
     try {
       const query = new URLSearchParams({
@@ -56,7 +76,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col bg-gray-50">
+    <main className="relative min-h-screen flex flex-col bg-gray-50 overflow-hidden">
       <CustomerHeader />
 
       {/* Hero Section */}
@@ -70,7 +90,7 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
 
-        {/* Banner content */}
+        {/* Main Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -86,17 +106,17 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="text-lg md:text-2xl mb-8 max-w-2xl text-gray-200"
           >
-            Explore top-rated restaurants and mouthwatering dishes near your location.
+            Explore top-rated restaurants and mouthwatering dishes near your
+            location.
           </motion.p>
 
-          {/* 🔍 Search Box */}
+          {/* Search Bar */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6 }}
             className="flex flex-col md:flex-row items-center justify-center gap-3 bg-white p-4 rounded-2xl shadow-2xl w-full max-w-3xl"
           >
-            {/* Location Select */}
             <div className="relative w-full md:w-1/3">
               <MapPin className="absolute left-3 top-3 text-gray-400" />
               <select
@@ -113,7 +133,6 @@ export default function Home() {
               </select>
             </div>
 
-            {/* Search Input with Enter functionality */}
             <div className="relative w-full md:w-2/3">
               <Search className="absolute left-3 top-3 text-gray-400" />
               <input
@@ -124,7 +143,7 @@ export default function Home() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    handleSearch(); // ✅ Trigger search on Enter
+                    handleSearch();
                   }
                 }}
                 className="w-full pl-10 p-3 rounded-xl border border-gray-200 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
@@ -134,7 +153,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Search Results */}
+      {/* Results */}
       {restaurants.length > 0 && (
         <section className="py-16 px-6 md:px-12 bg-gray-50 text-center">
           <motion.h2
@@ -152,7 +171,9 @@ export default function Home() {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 200 }}
                 className="bg-white shadow-lg rounded-2xl overflow-hidden w-full max-w-sm cursor-pointer hover:shadow-xl transition-all duration-300"
-                onClick={() => router.push(`/explore/${item.name}?id=${item._id}`)}
+                onClick={() =>
+                  router.push(`/explore/${item.name}?id=${item._id}`)
+                }
               >
                 <div className="relative h-60 w-full">
                   <img
@@ -179,6 +200,20 @@ export default function Home() {
       )}
 
       <Footer />
+
+      {/*  Show Banner when logged out */}
+      <AnimatePresence>
+        {showBanner && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-center"
+          >
+            <BannerPage />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

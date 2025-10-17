@@ -88,7 +88,7 @@ export async function PUT(request) {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "1d" }
     );
 
     const safeUser = {

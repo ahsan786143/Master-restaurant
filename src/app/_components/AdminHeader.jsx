@@ -27,7 +27,7 @@ const RestaurantHeader = () => {
   }, [pathname, router]);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 shadow-lg">
+    <header className="sticky top-0 z-50 w-full bg-blue-600 shadow-md">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-[80px] px-6">
         {/* Logo */}
         <div
@@ -50,6 +50,14 @@ const RestaurantHeader = () => {
             {details && details.name ? (
               <>
                 <li>
+                  <Link
+                    href="/restaurant/profile"
+                    className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-black font-semibold rounded-full shadow-md transition"
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li>
                   <button
                     onClick={handleLogout}
                     className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition"
@@ -57,32 +65,28 @@ const RestaurantHeader = () => {
                     Logout
                   </button>
                 </li>
+              </>
+            ) : (
+              <>
                 <li>
                   <Link
                     href="/restaurant"
-                    className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-black font-semibold rounded-full shadow-md transition"
+                    className="px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-full shadow-md transition"
                   >
-                    Profile
+                    Login / SignUp
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/"
+                    className="px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-full shadow-md transition"
+                  >
+                    Back To Home
                   </Link>
                 </li>
               </>
-            ) : (
-              <li>
-                <Link
-                  href="/restaurant"
-                  className="px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-full shadow-md transition"
-                >
-                  Login / SignUp
-                </Link>
-              </li>
             )}
           </ul>
-          <Link
-            href="/"
-            className="px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-full shadow-md transition"
-          >
-            Back To Home Page
-          </Link>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -96,7 +100,7 @@ const RestaurantHeader = () => {
 
       {/* Mobile Dropdown */}
       {menuOpen && (
-        <div className="md:hidden bg-gradient-to-b from-blue-600 to-sky-500 px-6 py-4 space-y-4">
+        <div className="md:hidden bg-blue-700 px-6 py-4 space-y-4">
           <Link
             href="/"
             className="block text-white hover:text-yellow-300 transition"
@@ -104,23 +108,16 @@ const RestaurantHeader = () => {
           >
             Home
           </Link>
-          <Link
-            href="/about"
-            className="block text-white hover:text-yellow-300 transition"
-            onClick={() => setMenuOpen(false)}
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="block text-white hover:text-yellow-300 transition"
-            onClick={() => setMenuOpen(false)}
-          >
-            Contact
-          </Link>
 
           {details && details.name ? (
             <>
+              <Link
+                href="/restaurant/profile"
+                className="block px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-black font-semibold rounded-md"
+                onClick={() => setMenuOpen(false)}
+              >
+                Profile
+              </Link>
               <button
                 onClick={() => {
                   handleLogout();
@@ -130,30 +127,25 @@ const RestaurantHeader = () => {
               >
                 Logout
               </button>
-              <Link
-                href="/restaurant"
-                className="block px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-black font-semibold rounded-md"
-                onClick={() => setMenuOpen(false)}
-              >
-                Profile
-              </Link>
             </>
           ) : (
-            <Link
-              href="/restaurant"
-              className="block px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-md"
-              onClick={() => setMenuOpen(false)}
-            >
-              Login / SignUp
-            </Link>
+            <>
+              <Link
+                href="/restaurant"
+                className="block px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-md"
+                onClick={() => setMenuOpen(false)}
+              >
+                Login / SignUp
+              </Link>
+              <Link
+                href="/"
+                className="block px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-md"
+                onClick={() => setMenuOpen(false)}
+              >
+                Back To Home
+              </Link>
+            </>
           )}
-          <Link
-            href="/"
-            className="block px-4 py-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold rounded-md"
-            onClick={() => setMenuOpen(false)}
-          >
-            Back To Home Page
-          </Link>
         </div>
       )}
     </header>

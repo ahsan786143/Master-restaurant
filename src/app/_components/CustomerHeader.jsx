@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Store } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 
 const CustomerHeader = () => {
   const [details, setDetails] = useState("");
@@ -41,9 +41,7 @@ const CustomerHeader = () => {
     } else if (data && pathname === "/restaurant") {
       router.push("/restaurant/dashboard");
     } else {
-      if (data) {
-        setDetails(JSON.parse(data));
-      }
+      if (data) setDetails(JSON.parse(data));
     }
   }, []);
 
@@ -93,41 +91,31 @@ const CustomerHeader = () => {
               </Link>
             </li>
 
-            {/* ✅ Own a Restaurant Button */}
-            <li>
-              <button
-                onClick={() => router.push("/restaurant")}
-                className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-4 py-2 rounded-full shadow-md transition"
-              >
-                <Store size={18} /> Own a Restaurant?
-              </button>
-            </li>
-
-            {/* ✅ Cart */}
-            <li>
-              <Link href="/cart" className="relative">
-                <ShoppingCart
-                  size={26}
-                  className="text-white hover:text-yellow-300 transition"
-                />
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full px-1.5 py-0.5">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-            </li>
-
-            {/* ✅ Auth Buttons */}
+            {/* ✅ Cart + Logout only if logged in */}
             {details && details.name ? (
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition"
-                >
-                  Logout
-                </button>
-              </li>
+              <>
+                <li>
+                  <Link href="/cart" className="relative">
+                    <ShoppingCart
+                      size={26}
+                      className="text-white hover:text-yellow-300 transition"
+                    />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs font-bold rounded-full px-1.5 py-0.5">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
             ) : (
               <li>
                 <Link
@@ -175,34 +163,25 @@ const CustomerHeader = () => {
             Contact
           </Link>
 
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              router.push("/restaurant");
-            }}
-            className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-4 py-2 rounded-full shadow-md transition"
-          >
-            <Store size={18} /> Own a Restaurant?
-          </button>
-
-          <Link
-            href="/cart"
-            className="flex items-center justify-center gap-2 text-lg hover:text-yellow-300"
-            onClick={() => setMenuOpen(false)}
-          >
-            <ShoppingCart size={22} /> Cart ({cartCount})
-          </Link>
-
           {details && details.name ? (
-            <button
-              onClick={() => {
-                setMenuOpen(false);
-                handleLogout();
-              }}
-              className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full text-white font-semibold"
-            >
-              Logout
-            </button>
+            <>
+              <Link
+                href="/cart"
+                className="flex items-center justify-center gap-2 text-lg hover:text-yellow-300"
+                onClick={() => setMenuOpen(false)}
+              >
+                <ShoppingCart size={22} /> Cart ({cartCount})
+              </Link>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  handleLogout();
+                }}
+                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full text-white font-semibold"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <Link
               href="/user_auth"
