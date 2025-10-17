@@ -16,27 +16,21 @@ export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
   const router = useRouter();
 
-  //  Watch for login/logout changes dynamically
+  // ✅ Function to check login state
+  const checkAuthStatus = () => {
+    const storedUser =
+      localStorage.getItem("user") || localStorage.getItem("restaurantUser");
+    setShowBanner(!storedUser);
+  };
+
+  // ✅ Run check on mount + on storage changes
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const user = localStorage.getItem("user");
-      const restaurantUser = localStorage.getItem("restaurantUser");
-      setShowBanner(!(user || restaurantUser));
-    };
-
-    checkLoginStatus(); // initial check
-    window.addEventListener("storage", checkLoginStatus); // react to login/logout in other tabs
-
-    // Custom event for logout or login within same tab
-    window.addEventListener("authChange", checkLoginStatus);
-
-    return () => {
-      window.removeEventListener("storage", checkLoginStatus);
-      window.removeEventListener("authChange", checkLoginStatus);
-    };
+    checkAuthStatus();
+    window.addEventListener("storage", checkAuthStatus);
+    return () => window.removeEventListener("storage", checkAuthStatus);
   }, []);
 
-  //  Fetch locations & restaurants when banner hides
+  // ✅ Fetch data only when logged in (banner hidden)
   useEffect(() => {
     if (!showBanner) {
       const fetchLocations = async () => {
@@ -53,7 +47,7 @@ export default function Home() {
     }
   }, [showBanner]);
 
-  //  Search handler
+  // ✅ Search handler
   const handleSearch = async () => {
     try {
       const query = new URLSearchParams({
@@ -201,7 +195,7 @@ export default function Home() {
 
       <Footer />
 
-      {/*  Show Banner when logged out */}
+      {/* ✅ Banner shows when not logged in */}
       <AnimatePresence>
         {showBanner && (
           <motion.div
