@@ -18,7 +18,7 @@ const RestaurantLogin = ({ onToggle }) => {
       setLoading(true);
       setError("");
 
-      const res = await fetch("/api/restaurant", {
+      const res = await fetch("https://master-restaurant-713y.vercel.app/api/restaurant", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

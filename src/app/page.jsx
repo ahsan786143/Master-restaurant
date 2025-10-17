@@ -16,21 +16,21 @@ export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
   const router = useRouter();
 
-  // ✅ Function to check login state
+  //  Function to check login state
   const checkAuthStatus = () => {
     const storedUser =
       localStorage.getItem("user") || localStorage.getItem("restaurantUser");
     setShowBanner(!storedUser);
   };
 
-  // ✅ Run check on mount + on storage changes
+  //  Run check on mount + on storage changes
   useEffect(() => {
     checkAuthStatus();
     window.addEventListener("storage", checkAuthStatus);
     return () => window.removeEventListener("storage", checkAuthStatus);
   }, []);
 
-  // ✅ Fetch data only when logged in (banner hidden)
+  //  Fetch data only when logged in (banner hidden)
   useEffect(() => {
     if (!showBanner) {
       const fetchLocations = async () => {
@@ -47,7 +47,7 @@ export default function Home() {
     }
   }, [showBanner]);
 
-  // ✅ Search handler
+  //Search handler
   const handleSearch = async () => {
     try {
       const query = new URLSearchParams({
@@ -55,7 +55,7 @@ export default function Home() {
         restaurant: searchTerm,
       }).toString();
 
-      const res = await fetch(`/api/customer/search?${query}`);
+      const res = await fetch(`https://master-restaurant-713y.vercel.app/api/customer/search?${query}`);
       const data = await res.json();
 
       if (data && Array.isArray(data.restaurants)) {
@@ -195,7 +195,7 @@ export default function Home() {
 
       <Footer />
 
-      {/* ✅ Banner shows when not logged in */}
+      {/* Banner shows when not logged in */}
       <AnimatePresence>
         {showBanner && (
           <motion.div

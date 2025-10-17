@@ -9,7 +9,7 @@ export async function GET(request) {
     const location = searchParams.get("location");
     const restaurant = searchParams.get("restaurant"); // This can be food or restaurant name
 
-    console.log("🔍 Search Query:", { location, restaurant });
+    console.log(" Search Query:", { location, restaurant });
 
     await connectToDatabase();
 
@@ -46,7 +46,7 @@ export async function GET(request) {
       foods,
     });
   } catch (error) {
-    console.error("❌ Error in /search API:", error);
+    console.error(" Error in /search API:", error);
     return NextResponse.json(
       { success: false, message: error.message },
       { status: 500 }

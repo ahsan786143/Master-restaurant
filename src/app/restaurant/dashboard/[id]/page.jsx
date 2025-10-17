@@ -19,7 +19,7 @@ const EditFoodItems = () => {
 
   const handleLoadFoodItems = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/restaurant/foods/edit/${id}`);
+      const res = await fetch(`https://master-restaurant-713y.vercel.app/api/restaurant/foods/edit/${id}`);
       const data = await res.json();
 
       if (data.success) {
@@ -43,7 +43,7 @@ const EditFoodItems = () => {
       return;
     }
 
-    const res = await fetch(`http://localhost:3000/api/restaurant/foods/edit/${id}`, {
+    const res = await fetch(`https://master-restaurant-713y.vercel.app/api/restaurant/foods/edit/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, price, description, img_URL: image }),

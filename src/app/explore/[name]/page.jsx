@@ -15,11 +15,11 @@ const Page = ({ params, searchParams }) => {
     if (id) loadRestaurantDetails();
   }, [id]);
 
-  // ✅ Fetch restaurant details
+  // Fetch restaurant details
   const loadRestaurantDetails = async () => {
     try {
-      console.log("📍 Restaurant:", name);
-      console.log("📍 ID:", id);
+      console.log(" Restaurant:", name);
+      console.log(" ID:", id);
 
       const response = await fetch(`http://localhost:3000/api/customer/${id}`);
       const data = await response.json();
@@ -29,13 +29,13 @@ const Page = ({ params, searchParams }) => {
         setFoodItems(data.foodItem);
       }
     } catch (error) {
-      console.error("⚠️ Error fetching restaurant:", error);
+      console.error("Error fetching restaurant:", error);
     }
   };
 
   const decodedName = decodeURI(restaurantDetails?.name || "");
 
-  // ✅ Add to Cart Function
+  // Add to Cart Function
   const addToCart = (item) => {
     // Get existing cart from localStorage
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -59,7 +59,7 @@ const Page = ({ params, searchParams }) => {
     // Save back to localStorage
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    // ✅ Trigger header update
+    // Trigger header update
     window.dispatchEvent(new Event("cartUpdated"));
 
    
@@ -69,7 +69,7 @@ const Page = ({ params, searchParams }) => {
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 text-gray-800">
       <CustomerHeader />
 
-      {/* ✅ Hero Section */}
+      {/* Hero Section */}
       <section className="relative w-full py-16 px-6 md:px-16 text-center bg-white shadow-sm">
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
@@ -89,7 +89,7 @@ const Page = ({ params, searchParams }) => {
         </motion.p>
       </section>
 
-      {/* ✅ Restaurant Info */}
+      {/*  Restaurant Info */}
       <section className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -98,21 +98,21 @@ const Page = ({ params, searchParams }) => {
           className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg"
         >
           <p>
-            <strong>Name:</strong> {restaurantDetails?.name}
+            <strong> Restaurant Name:</strong> {restaurantDetails?.name}
           </p>
           <p>
-            <strong>Email:</strong> {restaurantDetails?.email}
+            <strong>Restaurant Email:</strong> {restaurantDetails?.email}
           </p>
           <p>
-            <strong>Phone:</strong> {restaurantDetails?.phone}
+            <strong>Restaurant Phone:</strong> {restaurantDetails?.phone}
           </p>
           <p>
-            <strong>Address:</strong> {restaurantDetails?.address}
+            <strong> Restaurant Address:</strong> {restaurantDetails?.address}
           </p>
         </motion.div>
       </section>
 
-      {/* ✅ Food Items */}
+      {/*  Food Items */}
       <section className="max-w-6xl mx-auto mt-16 px-6 md:px-10">
         <motion.h2
           initial={{ opacity: 0 }}

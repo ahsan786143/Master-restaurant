@@ -16,7 +16,7 @@ const CustomerHeader = () => {
     router.push("/user_auth");
   };
 
-  // ✅ Listen for cart updates
+  //  Listen for cart updates
   useEffect(() => {
     const updateCartCount = () => {
       const cartData = localStorage.getItem("cart");
@@ -33,7 +33,7 @@ const CustomerHeader = () => {
     };
   }, []);
 
-  // ✅ Manage user session + redirects
+  //  Manage user session + redirects
   useEffect(() => {
     let data = localStorage.getItem("user");
     if (!data && pathname === "/restaurant/dashboard") {
@@ -48,7 +48,7 @@ const CustomerHeader = () => {
   return (
     <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-sky-400 via-blue-500 to-blue-600 shadow-lg">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-[70px] px-4 sm:px-6">
-        {/* ✅ Logo */}
+        {/*  Logo */}
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => router.push("/")}
@@ -63,7 +63,7 @@ const CustomerHeader = () => {
           </h1>
         </div>
 
-        {/* ✅ Desktop / Tablet Menu */}
+        {/*  Desktop / Tablet Menu */}
         <nav className="hidden lg:flex">
           <ul className="flex items-center gap-6 xl:gap-8">
             <li>
@@ -91,7 +91,7 @@ const CustomerHeader = () => {
               </Link>
             </li>
 
-            {/* ✅ Cart + Logout only if logged in */}
+            {/*  Cart + Logout only if logged in */}
             {details && details.name ? (
               <>
                 <li>
@@ -129,7 +129,7 @@ const CustomerHeader = () => {
           </ul>
         </nav>
 
-        {/* ✅ Mobile / iPad Menu Toggle */}
+        {/*  Mobile / iPad Menu Toggle */}
         <button
           className="lg:hidden text-white"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -138,7 +138,7 @@ const CustomerHeader = () => {
         </button>
       </div>
 
-      {/* ✅ Mobile / iPad Collapsible Menu */}
+      {/*  Mobile / iPad Collapsible Menu */}
       {menuOpen && (
         <div className="lg:hidden bg-blue-600 text-white py-5 px-6 flex flex-col gap-4 sm:gap-5 shadow-md transition-all">
           <Link

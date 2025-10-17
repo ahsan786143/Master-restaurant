@@ -38,11 +38,11 @@ const Page = () => {
       date: new Date().toLocaleString(),
     };
 
-    // ✅ Save order (demo purpose)
+    //  Save order (demo purpose)
     localStorage.setItem("order", JSON.stringify(order));
     localStorage.removeItem("cart");
 
-    alert("🎉 Order placed successfully!");
+    alert(" Order placed successfully!");
     router.push("/"); // redirect to home
   };
 

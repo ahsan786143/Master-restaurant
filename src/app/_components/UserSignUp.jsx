@@ -23,7 +23,7 @@ const UserSignUp = ({ onToggle }) => {
     setErrorMsg("");
 
     try {
-      const res = await fetch("/api/user", {
+      const res = await fetch("https://master-restaurant-713y.vercel.app/api/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ const UserSignUp = ({ onToggle }) => {
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data));
-        router.push("http://localhost:3000");
+        router.push("https://master-restaurant-713y.vercel.app/");
       } else {
         setErrorMsg(data.error || "Signup failed. Please try again.");
       }
@@ -164,7 +164,7 @@ const UserSignUp = ({ onToggle }) => {
       </div>
 
       {/* Social Signup */}
-      <button
+      {/* <button
         type="button"
         className="w-full py-2 mb-3 rounded-lg border border-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 cursor-pointer transition"
       >
@@ -174,8 +174,8 @@ const UserSignUp = ({ onToggle }) => {
           className="w-5"
         />
         Sign up with Google
-      </button>
-      <button
+      </button> */}
+      {/* <button
         type="button"
         className="w-full py-2 rounded-lg border border-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100  cursor-pointer transition"
       >
@@ -185,7 +185,7 @@ const UserSignUp = ({ onToggle }) => {
           className="w-5"
         />
         Sign up with Facebook
-      </button>
+      </button> */}
 
       {/* Toggle Login */}
       <p className="text-center text-sm text-gray-600 mt-6">
