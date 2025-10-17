@@ -12,11 +12,11 @@ const Footer = () => {
           <div className="flex items-center gap-2 mb-3">
             <img
               src="https://png.pngtree.com/png-clipart/20250106/original/pngtree-orange-delivery-man-on-motorcycle-png-image_20086589.png"
-              alt="DFC Logo"
+              alt="Master Logo"
               className="w-12 h-12 object-contain"
             />
             <h2 className="text-xl font-extrabold tracking-wide">
-              DFC Restaurant
+              Master Restaurant
             </h2>
           </div>
           <p className="text-sm text-white/80 text-center md:text-left">
@@ -90,7 +90,7 @@ const Footer = () => {
 
       {/* Bottom Line */}
       <div className="mt-8 border-t border-white/20 pt-4 text-center text-sm text-white/70">
-        © {new Date().getFullYear()} DFC Restaurant. All Rights Reserved.
+        © {new Date().getFullYear()} Master Restaurant. All Rights Reserved.
       </div>
     </footer>
   );

@@ -157,11 +157,11 @@ const UserSignUp = ({ onToggle }) => {
       </button>
 
       {/* Divider */}
-      <div className="my-6 flex items-center gap-4">
+      {/* <div className="my-6 flex items-center gap-4">
         <hr className="flex-1 border-gray-300" />
         <span className="text-gray-400 text-sm">OR</span>
         <hr className="flex-1 border-gray-300" />
-      </div>
+      </div> */}
 
       {/* Social Signup */}
       {/* <button

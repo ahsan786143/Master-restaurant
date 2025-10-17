@@ -18,7 +18,7 @@ const UserLogin = ({ onToggle }) => {
       setLoading(true);
       setError("");
 
-      const res = await fetch("/api/user", {
+      const res = await fetch("https://master-restaurant-713y.vercel.app/api/user", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -36,7 +36,7 @@ const UserLogin = ({ onToggle }) => {
       localStorage.setItem("user", JSON.stringify(data));
 
       // redirect
-      window.location.href = "http://localhost:3000/";
+      window.location.href = "https://master-restaurant-713y.vercel.app/";
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
@@ -95,14 +95,14 @@ const UserLogin = ({ onToggle }) => {
         </button>
 
         {/* Divider */}
-        <div className="my-6 flex items-center gap-4">
+        {/* <div className="my-6 flex items-center gap-4">
           <hr className="flex-1 border-gray-300" />
           <span className="text-gray-400 text-sm">OR</span>
           <hr className="flex-1 border-gray-300" />
-        </div>
+        </div> */}
 
         {/* Social Login */}
-        <button className="w-full py-3 mb-3 rounded-xl border border-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 transition shadow-sm">
+        {/* <button className="w-full py-3 mb-3 rounded-xl border border-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 transition shadow-sm">
           <img
             src="https://img.icons8.com/color/48/google-logo.png"
             className="w-5"
@@ -115,7 +115,7 @@ const UserLogin = ({ onToggle }) => {
             className="w-5"
           />
           Continue with Facebook
-        </button>
+        </button> */}
 
         {/* Toggle SignUp */}
         <p className="text-center text-sm text-gray-700 mt-6">
