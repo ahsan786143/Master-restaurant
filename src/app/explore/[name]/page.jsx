@@ -21,7 +21,7 @@ const Page = ({ params, searchParams }) => {
       console.log(" Restaurant:", name);
       console.log(" ID:", id);
 
-      const response = await fetch(`https://master-restaurant-713y.vercel.app/api/customer/${id}`);
+      const response = await fetch(`/api/customer/${id}`);
       const data = await response.json();
 
       if (data.success) {

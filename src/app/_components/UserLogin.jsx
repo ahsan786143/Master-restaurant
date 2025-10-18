@@ -18,7 +18,7 @@ const UserLogin = ({ onToggle }) => {
       setLoading(true);
       setError("");
 
-      const res = await fetch("https://master-restaurant-713y.vercel.app/api/user", {
+      const res = await fetch("/api/user", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -36,7 +36,7 @@ const UserLogin = ({ onToggle }) => {
       localStorage.setItem("user", JSON.stringify(data));
 
       // redirect
-      window.location.href = "https://master-restaurant-713y.vercel.app/";
+      window.location.href = "http://localhost:3000/";
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");

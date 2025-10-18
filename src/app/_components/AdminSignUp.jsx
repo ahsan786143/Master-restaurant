@@ -23,7 +23,7 @@ const RestaurantSignUp = ({ onToggle }) => {
     setErrorMsg("");
 
     try {
-      const res = await fetch("https://master-restaurant-713y.vercel.app/api/restaurant", {
+      const res = await fetch("http://localhost:3000/api/restaurant", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

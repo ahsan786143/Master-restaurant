@@ -55,7 +55,7 @@ export default function Home() {
         restaurant: searchTerm,
       }).toString();
 
-      const res = await fetch(`https://master-restaurant-713y.vercel.app/api/customer/search?${query}`);
+      const res = await fetch(`/api/customer/search?${query}`);
       const data = await res.json();
 
       if (data && Array.isArray(data.restaurants)) {
@@ -155,7 +155,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl font-bold mb-10 text-gray-800"
           >
-            Search Results
+            Top Restaurant
           </motion.h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-items-center">

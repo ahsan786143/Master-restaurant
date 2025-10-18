@@ -22,7 +22,7 @@ const AddFoodItems = () => {
     const resto_id = restaurantData?._id;
 
     try {
-      const response = await fetch("https://master-restaurant-713y.vercel.app/api/restaurant/foods", {
+      const response = await fetch("http://localhost:3000/api/restaurant/foods", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
