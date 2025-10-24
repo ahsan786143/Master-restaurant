@@ -4,8 +4,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"; 
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 // ---------------- SIGNUP ----------------
 export async function POST(request) {
@@ -13,7 +12,7 @@ export async function POST(request) {
     await connectToDatabase();
 
     const body = await request.json();
-    const { name, email, password, confirmPassword, city, phone , address, img_URL} = body || {};
+    const { name, email, password, confirmPassword, city, phone, address, img_URL } = body || {};
 
     if (!name || !email || !password || !confirmPassword) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -42,7 +41,7 @@ export async function POST(request) {
       city,
       phone,
       address,
-      img_URL
+      img_URL,
     });
 
     const safeUser = {
@@ -85,11 +84,9 @@ export async function PUT(request) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+    const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
     const safeUser = {
       _id: user._id,
@@ -115,9 +112,69 @@ export async function GET() {
   try {
     await connectToDatabase();
     const users = await User.find().select("-password").limit(50);
-    return NextResponse.json(users);
+    return NextResponse.json(users, { status: 200 });
   } catch (err) {
     console.error("Get users error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+
+// ---------------- UPDATE USER ----------------
+export async function PATCH(request) {
+  try {
+    await connectToDatabase();
+    const { id, ...updateData } = await request.json();
+
+    if (!id) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
+
+    // If password is being updated, hash it first
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    }).select("-password");
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { success: true, message: "User updated successfully", user: updatedUser },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Update user error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+
+// ---------------- DELETE USER ----------------
+export async function DELETE(request) {
+  try {
+    await connectToDatabase();
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { success: true, message: "User deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Delete user error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

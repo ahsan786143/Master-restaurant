@@ -2,7 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Pencil, Trash2, Save, X, LogOut, Users } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Save,
+  X,
+  LogOut,
+  Users,
+  ArrowLeft,
+  LayoutDashboard,
+  Loader2,
+  UserCircle2,
+} from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function ManageUsersPage() {
@@ -11,7 +22,7 @@ export default function ManageUsersPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // ✅ Load users
+  //  Load users from API
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (!token) {
@@ -20,13 +31,16 @@ export default function ManageUsersPage() {
     }
 
     fetch("/api/user")
-      .then((res) => res.json())
-      .then((data) => setUsers(data))
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Network error");
+        const data = await res.json();
+        setUsers(data.users || []);
+      })
       .catch(() => toast.error("Failed to load users"))
       .finally(() => setLoading(false));
   }, [router]);
 
-  // ✅ Delete user
+  //  Delete user
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this user?")) return;
 
@@ -34,16 +48,16 @@ export default function ManageUsersPage() {
       const res = await fetch(`/api/user/${id}`, { method: "DELETE" });
       if (res.ok) {
         setUsers(users.filter((u) => u._id !== id));
-        toast.success("User deleted ✅");
+        toast.success("User deleted");
       } else {
-        toast.error("Delete failed ❌");
+        toast.error("Delete failed");
       }
     } catch {
-      toast.error("Server error ❌");
+      toast.error("Server error");
     }
   };
 
-  // ✅ Save edited user
+  //  Save edited user
   const handleSave = async () => {
     try {
       const res = await fetch(`/api/user/${editingUser._id}`, {
@@ -56,18 +70,25 @@ export default function ManageUsersPage() {
         const updated = await res.json();
         setUsers(users.map((u) => (u._id === updated._id ? updated : u)));
         setEditingUser(null);
-        toast.success("User updated ✅");
+        toast.success("User updated");
       } else {
-        toast.error("Update failed ❌");
+        toast.error("Update failed");
       }
     } catch {
-      toast.error("Server error ❌");
+      toast.error("Server error");
     }
   };
 
+  //  Back button
+  const handleBack = () => {
+    router.push("/admin/dashboard");
+  };
+
+  //  Loading screen with spinner
   if (loading)
     return (
       <div className="flex justify-center items-center min-h-screen text-gray-600 text-lg">
+        <Loader2 className="animate-spin text-blue-600 mr-2" size={28} />
         Loading users...
       </div>
     );
@@ -75,8 +96,9 @@ export default function ManageUsersPage() {
   return (
     <div className="p-8 min-h-screen bg-gradient-to-b from-blue-50 to-blue-100">
       <Toaster position="top-right" />
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
         <div className="flex items-center gap-2">
           <Users className="text-blue-700" size={32} />
           <h1 className="text-3xl font-bold text-blue-800">
@@ -84,16 +106,27 @@ export default function ManageUsersPage() {
           </h1>
         </div>
 
-        <button
-          onClick={() => {
-            localStorage.removeItem("adminToken");
-            toast.success("Logged out successfully 👋");
-            setTimeout(() => router.push("/admin"), 1000);
-          }}
-          className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-800 transition"
-        >
-          <LogOut size={18} /> Logout
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Back Button with Dashboard Icon */}
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition shadow-sm"
+          >
+            <LayoutDashboard size={18} /> Back to Dashboard
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={() => {
+              localStorage.removeItem("adminToken");
+              toast.success("Logged out successfully");
+              setTimeout(() => router.push("/admin"), 1000);
+            }}
+            className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-800 transition"
+          >
+            <LogOut size={18} /> Logout
+          </button>
+        </div>
       </div>
 
       {/* Edit User Form */}
@@ -106,13 +139,13 @@ export default function ManageUsersPage() {
             className="bg-white/80 backdrop-blur-md border border-blue-100 p-6 rounded-xl shadow-lg mb-8"
           >
             <h2 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-              ✏️ Edit User
+               Edit User
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <input
                 type="text"
-                value={editingUser.name}
+                value={editingUser.name || ""}
                 onChange={(e) =>
                   setEditingUser({ ...editingUser, name: e.target.value })
                 }
@@ -121,7 +154,7 @@ export default function ManageUsersPage() {
               />
               <input
                 type="text"
-                value={editingUser.city}
+                value={editingUser.city || ""}
                 onChange={(e) =>
                   setEditingUser({ ...editingUser, city: e.target.value })
                 }
@@ -130,7 +163,7 @@ export default function ManageUsersPage() {
               />
               <input
                 type="text"
-                value={editingUser.phone}
+                value={editingUser.phone || ""}
                 onChange={(e) =>
                   setEditingUser({ ...editingUser, phone: e.target.value })
                 }
@@ -164,7 +197,7 @@ export default function ManageUsersPage() {
       >
         {users.length === 0 ? (
           <p className="text-gray-600 text-center mt-10 text-lg">
-            No users found 😕
+            No users found
           </p>
         ) : (
           users.map((user) => (
@@ -173,9 +206,12 @@ export default function ManageUsersPage() {
               whileHover={{ scale: 1.02 }}
               className="bg-white/90 border border-blue-100 shadow-sm hover:shadow-lg rounded-2xl p-5 transition backdrop-blur-md"
             >
-              <h3 className="text-lg font-semibold text-blue-800 mb-1">
-                {user.name}
-              </h3>
+              <div className="flex items-center gap-2 mb-2">
+                <UserCircle2 className="text-blue-600" size={22} />
+                <h3 className="text-lg font-semibold text-blue-800">
+                  {user.name}
+                </h3>
+              </div>
               <p className="text-sm text-gray-600">{user.email}</p>
               <p className="text-sm text-gray-500 mb-3">
                 {user.city} • {user.phone}

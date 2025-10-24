@@ -13,7 +13,7 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "User deleted successfully ✅" });
+    return NextResponse.json({ message: "User deleted successfully " });
   } catch (error) {
     console.error("Delete user error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
@@ -40,7 +40,7 @@ export async function PATCH(request, { params }) {
     }
 
     return NextResponse.json({
-      message: "User updated successfully ✅",
+      message: "User updated successfully ",
       user: updatedUser,
     });
   } catch (error) {

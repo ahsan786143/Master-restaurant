@@ -23,7 +23,7 @@ const UserSignUp = ({ onToggle }) => {
     setErrorMsg("");
 
     try {
-      const res = await fetch("http://localhost:3000/api/user", {
+      const res = await fetch("/api/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ const UserSignUp = ({ onToggle }) => {
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data));
-        router.push("http://localhost:3000/");
+        router.push("/");
       } else {
         setErrorMsg(data.error || "Signup failed. Please try again.");
       }

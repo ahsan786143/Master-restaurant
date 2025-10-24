@@ -1,10 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import CustomerHeader from "@/app/_components/CustomerHeader";
 import Footer from "@/app/_components/Footer";
 
 const Page = ({ params, searchParams }) => {
+  const router = useRouter();
   const { name } = React.use(params);
   const { id } = React.use(searchParams);
 
@@ -18,8 +20,8 @@ const Page = ({ params, searchParams }) => {
   // Fetch restaurant details
   const loadRestaurantDetails = async () => {
     try {
-      console.log(" Restaurant:", name);
-      console.log(" ID:", id);
+      console.log("Restaurant:", name);
+      console.log("ID:", id);
 
       const response = await fetch(`/api/customer/${id}`);
       const data = await response.json();
@@ -35,13 +37,15 @@ const Page = ({ params, searchParams }) => {
 
   const decodedName = decodeURI(restaurantDetails?.name || "");
 
-  // Add to Cart Function
+  // Add to Cart Function with redirect
   const addToCart = (item) => {
     // Get existing cart from localStorage
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
     // Check if item already exists in cart
-    const itemExists = existingCart.find((cartItem) => cartItem._id === item._id);
+    const itemExists = existingCart.find(
+      (cartItem) => cartItem._id === item._id
+    );
 
     let updatedCart;
     if (itemExists) {
@@ -62,7 +66,8 @@ const Page = ({ params, searchParams }) => {
     // Trigger header update
     window.dispatchEvent(new Event("cartUpdated"));
 
-   
+    // Redirect to cart page
+    router.push("/cart");
   };
 
   return (
@@ -89,7 +94,7 @@ const Page = ({ params, searchParams }) => {
         </motion.p>
       </section>
 
-      {/*  Restaurant Info */}
+      {/* Restaurant Info */}
       <section className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -98,7 +103,7 @@ const Page = ({ params, searchParams }) => {
           className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg"
         >
           <p>
-            <strong> Restaurant Name:</strong> {restaurantDetails?.name}
+            <strong>Restaurant Name:</strong> {restaurantDetails?.name}
           </p>
           <p>
             <strong>Restaurant Email:</strong> {restaurantDetails?.email}
@@ -107,12 +112,12 @@ const Page = ({ params, searchParams }) => {
             <strong>Restaurant Phone:</strong> {restaurantDetails?.phone}
           </p>
           <p>
-            <strong> Restaurant Address:</strong> {restaurantDetails?.address}
+            <strong>Restaurant Address:</strong> {restaurantDetails?.address}
           </p>
         </motion.div>
       </section>
 
-      {/*  Food Items */}
+      {/* Food Items */}
       <section className="max-w-6xl mx-auto mt-16 px-6 md:px-10">
         <motion.h2
           initial={{ opacity: 0 }}
@@ -164,8 +169,6 @@ const Page = ({ params, searchParams }) => {
                     </span>
                     <button
                       onClick={() => addToCart(item)}
-                      
-
                       className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all"
                     >
                       Add to Cart

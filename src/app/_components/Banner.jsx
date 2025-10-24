@@ -15,7 +15,7 @@ const BannerPage = () => {
         className="text-center bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 backdrop-blur-md p-10 px-20 rounded-3xl shadow-2xl max-w-xl w-[90%]"
       >
         <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-8 drop-shadow-md">
-          Welcome to <span className="text-yellow-300">DFC Restaurant</span>
+          Welcome to <span className="text-yellow-300">Master Restaurant</span>
         </h1>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">

@@ -6,14 +6,14 @@ import CustomerHeader from "../_components/CustomerHeader";
 import Footer from "../_components/Footer";
 
 export default function ContactPage() {
-  // ✅ Form states
+  //  Form states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // ✅ Submit handler (connected to /api/contact)
+  // Submit handler (connected to /api/contact)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
@@ -34,11 +34,11 @@ export default function ContactPage() {
         setEmail("");
         setMessage("");
       } else {
-        alert("❌ " + (data.error || "Something went wrong!"));
+        alert(  (data.error || "Something went wrong!"));
       }
     } catch (error) {
       console.error("Error sending message:", error);
-      alert("⚠️ Failed to send message. Please try again later.");
+      alert(" Failed to send message. Please try again later.");
     } finally {
       setIsSending(false);
     }
@@ -48,7 +48,7 @@ export default function ContactPage() {
     <div className="bg-gradient-to-b from-white via-blue-50 to-sky-100 text-gray-800 overflow-hidden min-h-screen">
       <CustomerHeader />
 
-      {/* ✅ HERO SECTION */}
+      {/* HERO SECTION */}
       <section className="relative py-24 text-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-sky-600 via-blue-700 to-indigo-800 opacity-90"></div>
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1543352634-5932bcbda27a?auto=format&fit=crop&w=1600&q=60')] bg-cover bg-center mix-blend-overlay opacity-40"></div>
@@ -69,7 +69,7 @@ export default function ContactPage() {
         </motion.div>
       </section>
 
-      {/* ✅ CONTACT SECTION */}
+      {/*  CONTACT SECTION */}
       <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-10 items-start">
         {/* Contact Info */}
         <motion.div
@@ -127,7 +127,7 @@ export default function ContactPage() {
           </div>
         </motion.div>
 
-        {/* ✅ Contact Form */}
+        {/*  Contact Form */}
         <motion.form
           onSubmit={handleSubmit}
           initial={{ opacity: 0, x: 60 }}
@@ -191,7 +191,7 @@ export default function ContactPage() {
             </motion.button>
           </div>
 
-          {/* ✅ Success message overlay */}
+          {/*  Success message overlay */}
           {isSuccess && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}

@@ -4,7 +4,7 @@ const contactSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
-    message: { type: String, required: true }, // ✅ correct spelling
+    message: { type: String, required: true }, 
     resto_id: mongoose.Schema.Types.ObjectId,
   },
   { timestamps: true }

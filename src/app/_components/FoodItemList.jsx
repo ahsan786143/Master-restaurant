@@ -18,7 +18,7 @@ const FoodItemList = () => {
     const resto_id = restaurantData._id;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/restaurant/foods/${resto_id}`);
+      const response = await fetch(`/api/restaurant/foods/${resto_id}`);
       const data = await response.json();
       if (data.success) {
         setFoodItems(data.result);

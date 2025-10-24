@@ -40,7 +40,7 @@ const RestaurantHeader = () => {
             alt="logo"
           />
           <h1 className="text-2xl font-extrabold text-white drop-shadow-sm">
-            DFC Restaurant
+            Master Restaurant
           </h1>
         </div>
 
